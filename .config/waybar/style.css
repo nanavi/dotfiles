@@ -1,0 +1,126 @@
+@define-color background #282828;
+@define-color foreground #ebdbb2;
+@define-color black      #222222;
+@define-color yellow     #fabd2f;
+@define-color red        #fb4934;
+@define-color green      #b8bb26;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: Roboto Mono, "Font Awesome 5 Free";
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: @background;
+  /* background: #000000; */
+  color: @foreground;
+  transition-duration: 0.5s;
+}
+
+#workspaces,
+#tags {
+  background-color: @foreground;
+  padding: 0px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+#workspaces button,
+#tags button {
+  /* this \ makes it slim */
+  padding: 0 15px;
+  border-radius: 5px;
+  background-color: @foreground;
+  font-weight: bold;
+  margin: 0px;
+  color: @black;
+  border: 1px solid @foreground;
+}
+
+#workspaces button:hover,
+#tags button:hover {
+  color: @foreground;
+}
+
+#workspaces button.focused,
+#tags button.focused {
+  background-color: @background;
+  color: @foreground;
+  border: 1px solid @foreground;
+}
+
+#workspaces button.urgent {
+  background-color: @red;
+  color: @foreground;
+  border-bottom: 1px solid @foreground;
+}
+
+#mode {
+  background-color: @black;
+  border-top: 3px solid @black;
+  border-bottom: 3px solid @red;
+}
+
+#custom-usbguard,
+#custom-decrypted,
+#custom-updates,
+#custom-mail,
+#custom-vpn.off,
+#battery.warning,
+#memory.warning,
+#cpu.warning,
+#custom-dnd.on,
+#custom-tablet.on {
+  border-bottom: 3px solid @yellow;
+}
+
+#custom-systemd,
+#battery.critical,
+#memory.critical,
+#cpu.critical,
+#custom-yubikey,
+#custom-recording {
+  border-bottom: 3px solid @red;
+}
+
+#battery.charging {
+  border-bottom: 3px solid @green;
+}
+
+#mode,
+#pulseaudio,
+#custom-usbguard,
+#custom-yubikey,
+#custom-decrypted,
+#custom-systemd,
+#custom-updates,
+#custom-mail,
+#network,
+#cpu,
+#memory,
+#backlight,
+#battery,
+#clock {
+  padding: 0 6px;
+  margin: 0 3px;
+  background-color: @foreground;
+  color: @background;
+  border-radius: 5px;
+  /*border: 1px solid @background;*/
+}
+
+#custom-vpn,
+#custom-dnd,
+#custom-tablet,
+#custom-recording {
+  padding: 0;
+  margin: 0 6px;
+}
+
+#tray {
+  padding: 0 6px;
+  margin: 0 6px;
+}

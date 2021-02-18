@@ -1,0 +1,6 @@
+[submodule ".config/dwm"]
+	path = .config/dwm
+	url = https://github.com/senabi/dwm
+[submodule ".config/st"]
+	path = .config/st
+	url = https://github.com/senabi/st

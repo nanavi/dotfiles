@@ -1,0 +1,190 @@
+{
+  "layer": "top",
+  "height": 25,
+  "modules-left": [
+      "sway/workspaces",
+      "sway/mode",
+      "tray"
+  ],
+  "modules-right": [
+      "custom/media",
+      "custom/progress",
+      "custom/usbguard",
+      "custom/yubikey",
+      "custom/decrypted",
+      "custom/systemd",
+      "custom/updates",
+      "custom/mail",
+      "custom/recording",
+      "custom/dnd",
+      "custom/vpn",
+      "cpu",
+      "memory",
+      "custom/tablet",
+      "backlight",
+      "battery",
+      "pulseaudio",
+      "network",
+      "clock"
+  ],
+  "custom/media": {
+    "format": "{icon}{}",
+    "format-icons": {
+      "Playing": " ",
+      "Paused": " "
+    },
+    "exec": "playerctl metadata --format '{\"text\": \"{{title}}\", \"tooltip\": \"{{playerName}} : {{title}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+    "return-type": "json",
+    "max-length": 30
+  },
+  "sway/workspaces": {
+    "format": "{icon}",
+    "persistent_workspaces": {
+      "1": ["DP-1"],
+      "2": ["DP-1"],
+      "3": ["DP-1"],
+      "4": ["DP-1"],
+      "5": ["DP-1"],
+      "6": ["HDMI-A-2"],
+      "7": ["HDMI-A-2"],
+      "8": ["HDMI-A-2"],
+      "9": ["HDMI-A-2"],
+      "10": ["HDMI-A-2"]
+    },
+    "format-icons": {
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五",
+      "6": "六",
+      "7": "七",
+      "8": "八",
+      "9": "九",
+      "10": "十"
+    }
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "custom/progress": {
+      "exec": "waybar-progress",
+      "return-type": "json",
+      "interval": 1
+  },
+  "custom/usbguard": {
+      "exec": "waybar-usbguard",
+      "return-type": "json",
+      "on-click": "waybar-usbguard allow",
+      "on-click-right": "waybar-usbguard reject"
+  },
+  "custom/yubikey": {
+      "exec": "waybar-yubikey",
+      "return-type": "json"
+  },
+  "custom/decrypted": {
+      "exec": "waybar-decrypted",
+      "return-type": "json"
+  },
+  "custom/systemd": {
+      "exec": "waybar-systemd",
+      "return-type": "json",
+      "interval": 10
+  },
+  "custom/updates": {
+      "exec": "waybar-updates show",
+      "return-type": "json",
+      "signal": 1,
+      "on-click-right": "waybar-updates refresh",
+      "interval": "once"
+  },
+  "custom/mail": {
+      "exec": "waybar-mail",
+      "return-type": "json"
+  },
+  "custom/vpn": {
+      "exec": "waybar-vpn",
+      "return-type": "json"
+  },
+  "custom/dnd": {
+      "exec": "waybar-dnd",
+      "return-type": "json",
+      "signal": 2,
+      "interval": "once",
+      "on-click": "waybar-dnd toggle"
+  },
+  "custom/recording": {
+      "exec": "waybar-recording",
+      "return-type": "json",
+      "signal": 3,
+      "interval": "once"
+  },
+  "custom/tablet": {
+      "exec": "waybar-tablet",
+      "return-type": "json",
+      "signal": 4,
+      "interval": "once",
+      "on-click": "waybar-tablet toggle"
+  },
+  "clock": {
+      "interval": 1,
+      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+      "format": " {:%a, %d %b    %H:%M:%S}"
+  },
+  "cpu": {
+      "format": " {usage}%",
+      "states": {
+          "warning": 70,
+          "critical": 90
+      }
+  },
+  "memory": {
+      "format": " {}%",
+      "states": {
+          "warning": 70,
+          "critical": 90
+      }
+  },
+  "backlight": {
+      "format": "{icon} {percent}%",
+      "format-icons": [""]
+  },
+  "battery": {
+      "bat": "BAT0",
+      "states": {
+          "warning": 30,
+          "critical": 15
+      },
+      "format": "{icon} {capacity}%",
+      "format-charging": " {capacity}%",
+      "format-alt": "{time} {icon}",
+      "format-icons": ["", "", "", "", ""]
+  },
+  "network": {
+      "interval": 2,
+      "interface": "enp*",
+      "format-wifi": " {essid}",
+      "format-ethernet": " {ifname}",
+      "format-linked": " {ifname}",
+      "format-disconnected": "  ",
+      "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n {bandwidthDownBits}\n {bandwidthUpBits}"
+  },
+  "pulseaudio": {
+      "format": "{icon} {volume}%   {format_source}",
+      "format-bluetooth": "{icon} {volume}%   {format_source}",
+      "format-bluetooth-muted": " {icon}   {format_source}",
+      "format-muted": "   {format_source}",
+      "format-source": " {volume}%",
+      "format-source-muted": "",
+      "format-icons": {
+          "headphone": "",
+          "hands-free": "",
+          "headset": "",
+          "phone": "",
+          "portable": "",
+          "car": "",
+          "default": ["", "", ""]
+      },
+      "on-click": "pavucontrol"
+  }
+}

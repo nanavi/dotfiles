@@ -1,0 +1,1 @@
+/home/nabi/.scripts/startup.sh
