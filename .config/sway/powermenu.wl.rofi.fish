@@ -1,8 +1,8 @@
 #!/bin/fish
 
 ### Variables
-set theme card_circle.rasi
-set dir ~/.config/rofi/powermenu
+set powermenu_theme ~/.config/rofi/powermenu.rasi
+set confirm_prompt_theme ~/.config/rofi/confirm.rasi
 set uptime (uptime -p | sed -e 's/up //g') 
 set focused (swaymsg -t get_outputs | jq 'map(.focused) | reverse  | index(true)')
 
@@ -15,18 +15,13 @@ set logout 
 
 ### Confirmation
 function confirm_exit
-	rofi -dmenu -i -no-fixed-num-lines -p "Are You Sure? [y/n] ● " -config $dir/confirm.rasi -monitor $focused
-end
-
-### Message
-function msg
-	rofi -config $dir'/message.rasi' -e 'Available Options  -  y / n' -monitor $focused
+	rofi -dmenu -i -no-fixed-num-lines -p "Are You Sure? [y/n] ● " -theme $confirm_prompt_theme -monitor $focused
 end
 
 ### Icon Menu
 set options $shutdown\n$reboot\n$lock\n$suspend\n$logout
 ### Answer
-set chosen (echo -e $options | rofi -config $dir/$theme -p 'Goodbye, '$USER -dmenu -selected-row 2 -monitor $focused)
+set chosen (echo -e $options | rofi -theme $powermenu_theme -p 'Goodbye, '$USER -dmenu -selected-row 2 -monitor $focused)
 
 switch $chosen
 	case $shutdown
@@ -35,8 +30,6 @@ switch $chosen
 			systemctl poweroff
 		else if test $ans = 'n'
 			exit 0
-		else
-			msg
 		end
 	case $reboot
 		set ans (confirm_exit)
@@ -44,8 +37,6 @@ switch $chosen
 			systemctl reboot
 		else if test $ans = 'n'
 			exit 0
-		else
-			msg
 		end
 	case $lock
 		swaylock -s fill -i ~/.wallpapers/lockscreen
@@ -56,8 +47,6 @@ switch $chosen
 			systemctl suspend
 		else if test $ans = 'n'
 			exit 0
-		else
-			msg
 		end
 	case $logout	
 		set ans (confirm_exit)
@@ -65,7 +54,5 @@ switch $chosen
 			swaymsg exit
 		else if test $ans = 'n'
 			exit 0
-		else
-			msg
 		end
 end
