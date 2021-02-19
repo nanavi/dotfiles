@@ -109,6 +109,7 @@ aurpkgs=(
     unimatrix-git
     swappy
     bibata-cursor-theme
+    opencl-amd
 )
 aurpkgscount=0
 
@@ -124,10 +125,16 @@ for aurname in "${aurpkgs[@]}"; do
 	func_install_aur $aurname
 done
 
-curl -L https://get.oh-my.fish | fish
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-curl -fsSL https://starship.rs/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-
+#fonts
 mkdir -p ~/.local/share/fonts
 cp -r .local/share/fonts ~/.local/share/fonts
+
+# omf
+curl -L https://get.oh-my.fish | fish
+# bass
+omf install bass
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# starship prompt
+curl -fsSL https://starship.rs/install.sh | bash
+# nvm
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash

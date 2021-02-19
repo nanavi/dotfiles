@@ -1,14 +1,3 @@
-//configuration {
-//    font:			"Roboto Mono 18";
-//    show-icons:			true;
-//    icon-theme: 		"Papirus-dark";
-//    drun-display-format:        "{name}";
-//    disable-history:            false;
-//    fullscreen:                 false;
-//    hide-scrollbar: 		true;
-//    sidebar-mode: 		false;
-//}
-
 * {
   maincolor: #edbbb2;
   urgentcolor: #fb4934;

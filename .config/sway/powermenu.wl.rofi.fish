@@ -48,7 +48,7 @@ switch $chosen
 			msg
 		end
 	case $lock
-		betterlockscreen -l
+		swaylock -s fill -i ~/.wallpapers/lockscreen
 	case $suspend
 		set ans (confirm_exit)
 		if test $ans = 'y'
