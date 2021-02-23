@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # packages to install
 # fonts to install
+# configs
 # root configs
 func_install() {
 	if pacman -Qi $1 &> /dev/null; then
@@ -110,6 +111,7 @@ aurpkgs=(
     swappy
     bibata-cursor-theme
     opencl-amd
+    lightdm-webkit2-theme-glorious
 )
 aurpkgscount=0
 
@@ -125,16 +127,65 @@ for aurname in "${aurpkgs[@]}"; do
 	func_install_aur $aurname
 done
 
-#fonts
+# fonts
 mkdir -p ~/.local/share/fonts
 cp -r .local/share/fonts ~/.local/share/fonts
 
-# omf
+# omf, bass, starship, nvm
 curl -L https://get.oh-my.fish | fish
-# bass
 omf install bass
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-# starship prompt
 curl -fsSL https://starship.rs/install.sh | bash
-# nvm
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+
+bootstrap_list=(
+    .config/alacritty
+    .config/dwm
+    .config/fish
+    .config/fontconfig
+    .config/gtk-3.0
+    .config/kitty
+    .config/mako
+    .config/neofetch
+    .config/ranger
+    .config/rofi
+    .config/st
+    .config/sway
+    .config/waybar
+    .dwm
+    .local
+    .scripts
+    .wallpapers
+    .bash_profile
+    .bashrc
+    .bashrc-personal
+    .face
+    .xinitrc
+    .zshrc
+    .zshrc-personal
+)
+
+red='\033[0;31m'
+cyan='\033[0;36m'
+nocol='\033[0m'
+
+if [[ $1 == "clean" ]]
+then
+    for i in "${bootstrap_list[@]}"
+    do
+        rm -r ~/$i
+        [[ $? -eq 0 ]] && echo -e removed ~/$red$i$nocol
+    done
+else
+    dotfiles_dir="$( cd "$(dirname "$0")" ; pwd -P )"
+
+    for i in "${bootstrap_list[@]}"
+    do
+        ln -sT $dotfiles_dir/$i ~/$i
+        [[ $? -eq 0 ]] && echo -e $dotfiles_dir/$cyan$i$nocol "->" ~/$cyan$i$nocol
+    done
+fi
+
+
+#root config
+cp root/* /

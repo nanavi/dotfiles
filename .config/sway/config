@@ -124,12 +124,6 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 # Power Menu
 bindsym $mod+x exec $powermenu
 
-# TODO 
-# Redo Power Menu using bemenu
-# Find why bemenu sometimes appear on the wrong monitor
-#
-# Moving around:
-#
 # Move your focus around
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down

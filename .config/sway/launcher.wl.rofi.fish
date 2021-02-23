@@ -1,4 +1,4 @@
-#!/bin/fish
+#!/usr/bin/env fish
 
 set focused (swaymsg -t get_outputs | jq 'map(.focused) | reverse  | index(true)')
 set theme ~/.config/rofi/launcher.rasi

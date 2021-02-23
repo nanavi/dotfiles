@@ -1,11 +1,14 @@
 case $WM in
+qtile)
+	export XDG_SESSION_TYPE=x11
+	export GDK_BACKEND=x11
+	exec qtile
+	;;
 dwm)
 	while xsetroot -name "`date` `uptime | sed 's/.*,//'`"
 	do
 	    sleep 1
 	done &
-	export XDG_SESSION_TYPE=x11
-	export GDK_BACKEND=x11
 	echo selected DWM
 	exec feh --bg-center ~/Downloads/83415811_p0.png &
 	exec dwm
@@ -18,8 +21,6 @@ gnome)
 	exec gnome-session
 	;;
 *)
-	export XDG_SESSION_TYPE=x11
-	export GDK_BACKEND=x11
 	echo selected default DWM
 	# exec feh --bg-center ~/Downloads/83415811_p0.png &
 	exec dwm

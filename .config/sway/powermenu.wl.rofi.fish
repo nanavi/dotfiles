@@ -1,4 +1,4 @@
-#!/bin/fish
+#!/usr/bin/env fish
 
 ### Variables
 set powermenu_theme ~/.config/rofi/powermenu.rasi
