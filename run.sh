@@ -3,6 +3,8 @@
 # fonts to install
 # configs
 # root configs
+# systemd
+# aditional 
 func_install() {
 	if pacman -Qi $1 &> /dev/null; then
 		tput setaf 2
@@ -40,7 +42,7 @@ func_install_aur() {
     fi
 }
 
-pkgs=(
+mypkgs=(
     alacritty
     bat
     kitty
@@ -63,7 +65,6 @@ pkgs=(
     steam
     swayidle
     swaylock
-    slurp
     jq
     swaybg
     sway
@@ -71,7 +72,6 @@ pkgs=(
     trizen
     tmux
     udiskie
-    waybar
     wayland-protocols
     wl-clipboard
     wlroots
@@ -100,11 +100,13 @@ pkgs=(
     steam
     xorg
     wget
+    curl
 )
 pkgscount=0
 
-aurpkgs=(
+myaurpkgs=(
     neovim-nightly-bin
+    vscodium-bin
     spotify
     spicetify-cli
     unimatrix-git
@@ -115,28 +117,30 @@ aurpkgs=(
 )
 aurpkgscount=0
 
-for name in "${pkgs[@]}"; do
-    pkgscount=$[pkgscount+1]
-    tput setaf 3;echo "Installing package ::  "$pkgscount" " $name;tput sgr0;
-	func_install $name
-done
+install_my_pkgs() {
+    for name in "${mypkgs[@]}"; do
+        pkgscount=$[pkgscount+1]
+        tput setaf 3;echo "Installing package ::  "$pkgscount" " $name;tput sgr0;
+    	func_install $name
+    done
+    
+    for aurname in "${myaurpkgs[@]}"; do
+        aurpkgscount=$[aurpkgscount+1]
+        tput setaf 3;echo "Installing package ::  "$aurpkgscount" " $aurname;tput sgr0;
+    	func_install_aur $aurname
+    done
+}
 
-for aurname in "${aurpkgs[@]}"; do
-    aurpkgscount=$[aurpkgscount+1]
-    tput setaf 3;echo "Installing package ::  "$aurpkgscount" " $aurname;tput sgr0;
-	func_install_aur $aurname
-done
+dotfiles_dir="$( cd "$(dirname "$0")" ; pwd -P )"
 
+
+echo "###############################################################################"
+echo "##################  FONTS "
+echo "###############################################################################"
 # fonts
 mkdir -p ~/.local/share/fonts
-cp -r .local/share/fonts ~/.local/share/fonts
+cp -r .local/share/fonts/* ~/.local/share/fonts
 
-# omf, bass, starship, nvm
-curl -L https://get.oh-my.fish | fish
-omf install bass
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-curl -fsSL https://starship.rs/install.sh | bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 
 bootstrap_list=(
     .config/alacritty
@@ -163,11 +167,21 @@ bootstrap_list=(
     .xinitrc
     .zshrc
     .zshrc-personal
+    .gtkrc-2.0
 )
 
 red='\033[0;31m'
 cyan='\033[0;36m'
 nocol='\033[0m'
+
+tput setaf 3
+echo "###############################################################################"
+echo "##################  Local Config"
+echo "###############################################################################"
+echo
+tput sgr0
+# symbolic links, 
+rm -rf $HOME/.config/neofetch
 
 if [[ $1 == "clean" ]]
 then
@@ -177,8 +191,6 @@ then
         [[ $? -eq 0 ]] && echo -e removed ~/$red$i$nocol
     done
 else
-    dotfiles_dir="$( cd "$(dirname "$0")" ; pwd -P )"
-
     for i in "${bootstrap_list[@]}"
     do
         ln -sT $dotfiles_dir/$i ~/$i
@@ -186,6 +198,36 @@ else
     done
 fi
 
-
+echo "###############################################################################"
+echo "##################  Root Config"
+echo "###############################################################################"
 #root config
-cp root/* /
+cp -r $dotfiles_dir/root/* /.
+echo "##################  Systemd"
+sudo systemctl enable lightdm.service
+
+# ADITIONAL configs
+echo "###############################################################################"
+echo "##################  omf, bass, ohmyzsh, starship, nvm"
+echo "###############################################################################"
+# omf, bass, starship, nvm
+fish -c "curl -L https://get.oh-my.fish | fish"
+fish -c "omf install bass"
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "curl -fsSL https://starship.rs/install.sh | bash"
+sh -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
+
+#NOTES
+echo "###############################################################################"
+echo "SEE $HOME/TODO"
+echo "###############################################################################"
+echo "
+1. On /usr/share/vscodium-bin/resources/app/product.json
+   REPLACE 'extensionsGallery' WITH $HOME/TODO
+  \"extensionsGallery\": {
+    \"itemUrl\": \"https://marketplace.visualstudio.com/items\",
+    \"serviceUrl\": \"https://marketplace.visualstudio.com/_apis/public/gallery\"
+  },
+2. spicetfy-cli https://github.com/khanhas/spicetify-cli/wiki/Installation
+3. https://wiki.archlinux.org/index.php/LightDM#Changing_your_avatar
+" > $HOME/TODO
