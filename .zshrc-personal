@@ -1,3 +1,6 @@
+alias chrome="google-chrome-stable --force-dark-mode"
+alias google-chrome-stable="google-chrome-stable --force-dark-mode"
+
 export EDITOR="vim"
 export VISUAL="vim"
 export NVM_DIR="$HOME/.nvm"

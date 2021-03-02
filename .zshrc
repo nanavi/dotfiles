@@ -185,9 +185,9 @@ alias bupskel='cp -Rf /etc/skel ~/.skel-backup-$(date +%Y.%m.%d-%H.%M.%S)'
 alias cz='sudo cp /etc/skel/.zshrc ~/.zshrc && source ~/.zshrc'
 
 #switch between bash and zsh and fish
-alias tobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
-alias tozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
-alias tofish="sudo chsh $USER -s /usr/bin/fish && echo 'Now log out.'"
+alias tobash="sudo chsh $USER -s $(which bash) && echo 'Now log out.'"
+alias tozsh="sudo chsh $USER -s $(which zsh) && echo 'Now log out.'"
+alias tofish="sudo chsh $USER -s $(which fish) && echo 'Now log out.'"
 
 #quickly kill conkies
 alias kc='killall conky'
@@ -271,10 +271,6 @@ alias downgrade="sudo downgrade --ala-url https://bike.seedhost.eu/arcolinux/"
 
 #systeminfo
 alias probe="sudo -E hw-probe -all -upload"
-
-#programs
-alias chrome="google-chrome-stable --force-dark-mode"
-alias google-chrome-stable="google-chrome-stable --force-dark-mode"
 
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>

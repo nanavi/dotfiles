@@ -43,6 +43,12 @@ func_install_aur() {
 }
 
 mypkgs=(
+    linux
+    linux-lts
+    linux-zen
+    linux-headers
+    linux-lts-headers
+    linux-zen-headers
     alacritty
     bat
     kitty
@@ -69,9 +75,7 @@ mypkgs=(
     swaybg
     sway
     tldr
-    trizen
     tmux
-    udiskie
     wayland-protocols
     wl-clipboard
     wlroots
@@ -101,6 +105,12 @@ mypkgs=(
     xorg
     wget
     curl
+    opendoas
+    qtile
+    brave
+    firefox
+    lxappearance
+    reflector
 )
 pkgscount=0
 
@@ -114,8 +124,69 @@ myaurpkgs=(
     bibata-cursor-theme
     opencl-amd
     lightdm-webkit2-theme-glorious
+    google-chrome
+    openrazer-meta-git
+    polychromatic-git
 )
 aurpkgscount=0
+
+basic_pkgs=(
+    linux
+    linux-lts
+    linux-headers
+    linux-lts-headers
+    xorg
+    wget
+    curl
+    wayland-protocols
+    wl-clipboard
+    wlroots
+    xorg-wayland
+    waybar
+    slurp
+    sway
+    swayidle
+    swaylock
+    swaybg
+    grim
+    jq
+    playerctl
+    pamixer
+    pavucontrol
+    neofetch
+    noto-fonts-emoji
+    pfetch
+    rofi
+    ranger
+    mako
+    dunst
+    qtile
+    feh
+    papirus-icon-theme
+    alacritty
+    pango
+    ripgrep
+    exa
+    procs
+    bat
+    fd
+    zsh
+    emacs
+    imv
+    youtube-dl
+    opendoas
+    firefox
+    brave
+    lxappearance
+    reflector
+)
+basic_aurpkgs=(
+    lightdm-webkit2-theme-glorious
+    bibata-cursor-theme
+    neovim-nightly-bin
+    swappy
+    unimatrix-git
+)
 
 install_my_pkgs() {
     for name in "${mypkgs[@]}"; do
@@ -134,12 +205,15 @@ install_my_pkgs() {
 dotfiles_dir="$( cd "$(dirname "$0")" ; pwd -P )"
 
 
-echo "###############################################################################"
-echo "##################  FONTS "
-echo "###############################################################################"
-# fonts
-mkdir -p ~/.local/share/fonts
-cp -r .local/share/fonts/* ~/.local/share/fonts
+install_fonts() {
+    echo "###############################################################################"
+    echo "##################  FONTS "
+    echo "###############################################################################"
+    # fonts
+    mkdir -p ~/.local/share/fonts
+    cp -r .local/share/fonts/* ~/.local/share/fonts
+    fc-cache -fv
+}
 
 
 bootstrap_list=(
@@ -174,60 +248,86 @@ red='\033[0;31m'
 cyan='\033[0;36m'
 nocol='\033[0m'
 
-tput setaf 3
-echo "###############################################################################"
-echo "##################  Local Config"
-echo "###############################################################################"
-echo
-tput sgr0
-# symbolic links, 
-rm -rf $HOME/.config/neofetch
+symlink_dot_config() {
+    echo "###############################################################################"
+    echo "##################  Local Config"
+    echo "###############################################################################"
+    # symbolic links, 
+    rm -rf $HOME/.config/neofetch
+    
+    if [[ $1 == "clean" ]]
+    then
+        for i in "${bootstrap_list[@]}"
+        do
+            rm -r ~/$i
+            [[ $? -eq 0 ]] && echo -e removed ~/$red$i$nocol
+        done
+    else
+        for i in "${bootstrap_list[@]}"
+        do
+            ln -sT $dotfiles_dir/$i ~/$i
+            [[ $? -eq 0 ]] && echo -e $dotfiles_dir/$cyan$i$nocol "->" ~/$cyan$i$nocol
+        done
+    fi
+}
 
-if [[ $1 == "clean" ]]
-then
-    for i in "${bootstrap_list[@]}"
-    do
-        rm -r ~/$i
-        [[ $? -eq 0 ]] && echo -e removed ~/$red$i$nocol
-    done
-else
-    for i in "${bootstrap_list[@]}"
-    do
-        ln -sT $dotfiles_dir/$i ~/$i
-        [[ $? -eq 0 ]] && echo -e $dotfiles_dir/$cyan$i$nocol "->" ~/$cyan$i$nocol
-    done
-fi
+copy_root_config() {
+    echo "###############################################################################"
+    echo "##################  Root Config"
+    echo "###############################################################################"
+    #root config
+    cp -r $dotfiles_dir/root/* /.
+}
 
-echo "###############################################################################"
-echo "##################  Root Config"
-echo "###############################################################################"
-#root config
-cp -r $dotfiles_dir/root/* /.
-echo "##################  Systemd"
-sudo systemctl enable lightdm.service
+enable_systemd_services() {
+    echo "###############################################################################"
+    echo "##################  Systemd "
+    sudo systemctl enable lightdm.service
+}
 
 # ADITIONAL configs
-echo "###############################################################################"
-echo "##################  omf, bass, ohmyzsh, starship, nvm"
-echo "###############################################################################"
-# omf, bass, starship, nvm
-fish -c "curl -L https://get.oh-my.fish | fish"
-fish -c "omf install bass"
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-sh -c "curl -fsSL https://starship.rs/install.sh | bash"
-sh -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
+install_additional() {
+    echo "###############################################################################"
+    echo "##################  omf, bass, ohmyzsh, starship, nvm"
+    echo "###############################################################################"
+    # omf, bass, starship, nvm
+    fish -c "curl -L https://get.oh-my.fish | fish"
+    fish -c "omf install bass"
+    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sh -c "curl -fsSL https://starship.rs/install.sh | bash"
+    sh -c "wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash"
+}
 
 #NOTES
-echo "###############################################################################"
-echo "SEE $HOME/TODO"
-echo "###############################################################################"
-echo "
-1. On /usr/share/vscodium-bin/resources/app/product.json
-   REPLACE 'extensionsGallery' WITH $HOME/TODO
-  \"extensionsGallery\": {
-    \"itemUrl\": \"https://marketplace.visualstudio.com/items\",
-    \"serviceUrl\": \"https://marketplace.visualstudio.com/_apis/public/gallery\"
-  },
-2. spicetfy-cli https://github.com/khanhas/spicetify-cli/wiki/Installation
-3. https://wiki.archlinux.org/index.php/LightDM#Changing_your_avatar
-" > $HOME/TODO
+notes() {
+    echo "###############################################################################"
+    echo "SEE $HOME/TODO"
+    echo "###############################################################################"
+    echo "
+    1. On /usr/share/vscodium-bin/resources/app/product.json
+       REPLACE 'extensionsGallery' WITH $HOME/TODO
+      \"extensionsGallery\": {
+        \"itemUrl\": \"https://marketplace.visualstudio.com/items\",
+        \"serviceUrl\": \"https://marketplace.visualstudio.com/_apis/public/gallery\"
+      },
+    2. spicetfy-cli https://github.com/khanhas/spicetify-cli/wiki/Installation
+    3. https://wiki.archlinux.org/index.php/LightDM#Changing_your_avatar
+    " > $HOME/TODO
+}
+
+
+if [ $1 == "personal" ]
+then
+    install_my_pkgs
+    install_fonts
+    symlink_dot_config
+    copy_root_config
+    enable_systemd_services
+    install_additional
+    notes
+elif [$1 == "basic"]
+then
+    echo "BASIC"
+else
+    echo "DOING NOTHING"
+fi
