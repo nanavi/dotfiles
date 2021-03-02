@@ -227,7 +227,6 @@ bootstrap_list=(
     .config/neofetch
     .config/ranger
     .config/rofi
-    .config/st
     .config/sway
     .config/waybar
     .dwm
