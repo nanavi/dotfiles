@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Chrome X11 Dark Mode
+Exec=google-chrome-stable --force-dark-mode
+Icon=chrome
