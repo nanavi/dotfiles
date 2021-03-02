@@ -185,9 +185,9 @@ alias bupskel='cp -Rf /etc/skel ~/.skel-backup-$(date +%Y.%m.%d-%H.%M.%S)'
 alias cz='sudo cp /etc/skel/.zshrc ~/.zshrc && source ~/.zshrc'
 
 #switch between bash and zsh and fish
-alias tobash="sudo chsh $USER -s $(which bash) && echo 'Now log out.'"
-alias tozsh="sudo chsh $USER -s $(which zsh) && echo 'Now log out.'"
-alias tofish="sudo chsh $USER -s $(which fish) && echo 'Now log out.'"
+alias tobash="sudo chsh $USER -s "$(which bash)" && echo 'Now log out.'"
+alias tozsh="sudo chsh $USER -s "$(which zsh)" && echo 'Now log out.'"
+alias tofish="sudo chsh $USER -s "$(which fish)" && echo 'Now log out.'"
 
 #quickly kill conkies
 alias kc='killall conky'

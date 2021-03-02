@@ -76,6 +76,7 @@ alias merge="xrdb -merge ~/.Xresources"
 # pacman or pm
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
+
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
 alias upall="yay -Syu --noconfirm"
@@ -101,9 +102,9 @@ alias cb='sudo cp /etc/skel/.bashrc ~/.bashrc && source ~/.bashrc'
 #alias cz='sudo cp /etc/skel/.zshrc ~/.zshrc && source ~/.zshrc'
 
 #switch between bash and zsh
-alias tobash="sudo chsh $USER -s $(which bash) && echo 'Now log out.'"
-alias tozsh="sudo chsh $USER -s $(which zsh) && echo 'Now log out.'"
-alias tofish="sudo chsh $USER -s $(which fish) && echo 'Now log out.'"
+alias tobash="sudo chsh $USER -s "$(which bash)" && echo 'Now log out.'"
+alias tozsh="sudo chsh $USER -s "$(which zsh)"  && echo 'Now log out.'"
+alias tofish="sudo chsh $USER -s "$(which fish)" && echo 'Now log out.'"
 
 #quickly kill conkies
 alias kc='killall conky'
@@ -189,6 +190,10 @@ alias probe="sudo -E hw-probe -all -upload"
 alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
 
+#programs
+alias chrome="google-chrome-stable --force-dark-mode"
+alias google-chrome-stable="google-chrome-stable --force-dark-mode"
+
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
@@ -220,3 +225,9 @@ ex ()
 #in there. They will not be overwritten by skel.
 
 [[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
+
+neofetch
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
