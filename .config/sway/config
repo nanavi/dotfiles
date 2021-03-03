@@ -1,9 +1,3 @@
-### Autostart
-exec mako
-exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob --border-color '#ffaf3eac' --background-color '#121212ff' --bar-color '#ffaf3eac'
-exec_always python3 ~/.config/sway/swayfader.py
-
 ### Variables
 set $mod Mod4
 set $left h
@@ -33,21 +27,24 @@ set $blue    #458588
 set $purple  #d3869b
 set $white   #ffffff
 set $black   #000000
+set $xyellow #FFAF3E
+
+
+### Keyboard configuration
+input "2385:5842:Kingston_HyperX_Alloy_FPS_Pro_Mechanical_Gaming_Keyboard" {
+    xkb_layout us
+    xkb_options caps:escape
+   repeat_delay 300
+   repeat_rate 50
+}
+#input * 
+#input * 
 
 ### Mouse Configuration
 input "5426:92:Razer_Razer_DeathAdder_Elite" {
     accel_profile flat
     pointer_accel 0.1
 }
-
-### Keyboard configuration
-input "2385:5842:Kingston_HyperX_Alloy_FPS_Pro_Mechanical_Gaming_Keyboard" {
-    xkb_layout us
-    xkb_options caps:escape
-}
-input * repeat_delay 300
-input * repeat_rate 50
-
 
 ### Font
 font pango:RobotoMono Nerd Font 11px
@@ -60,10 +57,10 @@ output DP-1 resolution 1920x1080 position 0,0
 output HDMI-A-1 resolution 1920x1080 position 1920,0
 
 #class                   $border  $bg    $text  $indicator  $child_border
-client.focused           $bg02    $bg02  $fg01  $red        $fg02
+client.focused           $bg02    $bg02  $fg01  $xyellow    $fg02
 client.focused_inactive  $bg01    $bg01  $fg01  $bg01       $bg02
 client.unfocused         $bg01    $bg01  $fg02  $white      $bg01
-client.urgent            $bg02    $bg02  $fg01  $red        $red
+client.urgent            $bg02    $bg02  $fg01  $xyellow    $red
 
 ### Idle configuration
 #
@@ -248,10 +245,19 @@ gaps outer 0
 smart_borders no_gaps
 default_border pixel 1
 
+include /etc/sway/config.d/*
+
+### Autostart
+exec mako
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob --border-color '#FFFFAF3E' --background-color '#80121212' --bar-color '#FFFFAF3E'
+exec_always python3 ~/.config/sway/swayfader.py
+exec autotiling
+
 ### Audio | audio | sound:
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pamixer --getvolume > $SWAYSOCK.wob
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pamixer --getvolume > $SWAYSOCK.wob
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioRaiseVolume exec pamixer -ui 5 && pamixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioLowerVolume exec pamixer -ud 5 && pamixer --get-volume > $SWAYSOCK.wob
+bindsym XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
@@ -272,5 +278,3 @@ bindsym Ctrl+$mod+Shift+print exec "~/.config/sway/screenshot.wl.fish all"
 bindsym $mod+Shift+print exec "~/.config/sway/screenshot.wl.fish region"
 # Color Picker
 bindsym $mod+Shift+p exec "~/.config/sway/screenshot.wl.fish picker"
-
-include /etc/sway/config.d/*
