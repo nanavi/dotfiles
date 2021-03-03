@@ -1,9 +1,8 @@
 ### Autostart
 exec mako
-exec udiskie
-# exec polkit #for granting permission, i have gnome implementation
-# exec set b off # system beep off
-# exec_always --no-startup-id autotiling # idk
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob --border-color '#ffaf3eac' --background-color '#121212ff' --bar-color '#ffaf3eac'
+exec_always python3 ~/.config/sway/swayfader.py
 
 ### Variables
 set $mod Mod4
@@ -11,11 +10,8 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term alacritty
+set $term kitty
 set $font 'RobotoMono Nerd Font:size=11'
-# set $menu dmenu_path | dmenu | xargs swaymsg exec --
-# set $menu LD_LIBRARY_PATH=~/.config/bemenu BEMENU_RENDERERS=~/.config/bemenu bemenu-run
-# set $menu dmenu_run -c -l 14 -fn $font
 set $menu '~/.config/sway/launcher.wl.rofi.fish'
 set $powermenu '~/.config/sway/powermenu.wl.rofi.fish'
 set $gnome-schema org.gnome.desktop.interface
@@ -27,7 +23,6 @@ exec_always {
     gsettings set $gnome-schema cursor-theme 'Bibata-Modern-Ice'
     gsettings set $gnome-schema font-name    'Roboto Mono'
 }
-
 # set primary gruvbox colorscheme colors
 set $bg01    #282828
 set $bg02    #1d2021
@@ -50,12 +45,14 @@ input "2385:5842:Kingston_HyperX_Alloy_FPS_Pro_Mechanical_Gaming_Keyboard" {
     xkb_layout us
     xkb_options caps:escape
 }
+input * repeat_delay 300
+input * repeat_rate 50
+
 
 ### Font
 font pango:RobotoMono Nerd Font 11px
 
 ### Output configuration
-# Default wallpaper 
 output * bg ~/.wallpapers/makima-smile.jpg fill
 # Monitor layout
 # You can get the names of your outputs by running: swaymsg -t get_outputs
@@ -73,9 +70,10 @@ client.urgent            $bg02    $bg02  $fg01  $red        $red
 # Example configuration:
 #
 exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         timeout 900 'swaylock' \
+         timeout 1200 'swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -129,22 +127,12 @@ bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
-# Or use $mod+[up|down|left|right]
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
 
 # Move the focused window with the same, but add Shift
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
-# Ditto, with arrow keys
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
 
 # Workspaces:
 set $monitor-one 'DP-1'
@@ -182,6 +170,9 @@ bindsym $mod+Shift+7 move container to workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
+# Next/Previous
+bindsym $mod+Alt+$right workspace next_on_output
+bindsym $mod+Alt+$left workspace prev_on_output
 # Note: workspaces can have any name you want, not just numbers.
 # We just use 1-10 as the default.
 #
@@ -258,9 +249,9 @@ smart_borders no_gaps
 default_border pixel 1
 
 ### Audio | audio | sound:
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pamixer --getvolume > $SWAYSOCK.wob
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pamixer --getvolume > $SWAYSOCK.wob
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob
 bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
