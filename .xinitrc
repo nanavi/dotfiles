@@ -5,12 +5,11 @@ qtile)
 	exec qtile
 	;;
 dwm)
-	while xsetroot -name "`date` `uptime | sed 's/.*,//'`"
-	do
-	    sleep 1
-	done &
+#	while xsetroot -name "`date` `uptime | sed 's/.*,//'`"
+#	do
+#	    sleep 1
+#	done &
 	echo selected DWM
-	exec feh --bg-center ~/Downloads/83415811_p0.png &
 	exec dwm
 	;;
 gnome)
